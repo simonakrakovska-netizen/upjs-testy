@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPJŠ – Biológia Testy</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b2a4a;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+button {
+  padding: 10px 15px;
+  margin: 6px;
+  font-size: 16px;
+}
+.question {
+  margin-top: 20px;
+  font-size: 18px;
+}
+.answers label {
+  display: block;
+  margin: 5px;
+}
+</style>
+</head>
+<body>
+
+<h2>UPJŠ – Biológia (116–152)</h2>
+
+<select id="mode">
+  <option value="4">Prijímačky (4 možnosti)</option>
+  <option value="8">Učenie (8 možností)</option>
+</select>
+
+<br><br>
+<button onclick="start()">Spustiť test</button>
+
+<div id="test" style="display:none;">
+  <div class="question" id="question"></div>
+  <div class="answers" id="answers"></div>
+  <button onclick="next()">Ďalej</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+const questions = [
+["C","D","E"],["A","B","E","F","G","H"],["A","B","C","D","E","G"],
+["B","C","F"],["B","E","G","H"],["A","B","D","F","H"],
+["A","B","C","E"],["D","H"],["A","C"],["E","H"],
+
+["B","C","D","E","F","H"],["D","G","H"],["A","C","E"],
+["C","F","G"],["A","B","C","G"],["C","E","F","G","H"],
+["A","B","C","F","H"],["B","C","D"],["A","G","H"],
+["A","B","C","E","F"],["B","C","E","F"],["E"],["A"],
+["A","B","E","H"],["B","C","D","G","H"],["E","F","G"],
+["C","E","F","G"],["C","D","E","F"],["B","C","H"],
+["D","E","H"],["D","F","G","H"],["B","F","G"],
+["A","C","D","G"],["B","D","E","F","H"],
+["F","G","H"],["C","D","E"],["B","C","E","F","G"]
+];
+
+let i = 0;
+let score = 0;
+
+function start() {
+  document.getElementById("test").style.display = "block";
+  show();
+}
+
+function show() {
+  let mode = document.getElementById("mode").value;
+  let options = ["A","B","C","D","E","F","G","H"];
+  if (mode == "4") options = options.sort(() => 0.5 - Math.random()).slice(0,4);
+
+  document.getElementById("question").innerText = "Otázka " + (i+1);
+  const a = document.getElementById("answers");
+  a.innerHTML = "";
+
+  options.forEach(o => {
+    a.innerHTML += `<label><input type="checkbox" value="${o}"> ${o}</label>`;
+  });
+}
+
+function next() {
+  document.querySelectorAll("input:checked").forEach(x => {
+    if (questions[i].includes(x.value)) score++;
+  });
+  i++;
+  if (i < questions.length) show();
+  else document.getElementById("test").innerHTML =
+    "<h3>Hotovo</h3><p>Body: " + score + "</p>";
+}
+</script>
+
+</body>
+</html>
